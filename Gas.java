@@ -15,10 +15,10 @@ public class Gas extends Entity {
 
 
 
-    public static Obstacle createGas(String id, Point position,
+    public static Gas createGas(String id, Point position,
                                           List<PImage> images)
     {
-        return new Obstacle(id, position, images
+        return new Gas(id, position, images
         );
     }
 

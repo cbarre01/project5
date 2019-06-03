@@ -42,6 +42,8 @@ public final class VirtualWorld
    private static final int GAS_COL = 2;
    private static final int GAS_ROW = 3;
 
+
+
    private static double timeScale = 1.0;
 
    private ImageStore imageStore;
@@ -159,7 +161,7 @@ public final class VirtualWorld
 
             world.addEntity(newGasArray[i]);
          }
-
+         world.printEntities();
 
 
 

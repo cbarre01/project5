@@ -12,7 +12,10 @@ abstract class Entity {
 
 
 
-
+   public String toString()
+   {
+      return (this.getClass().getName() + "Pos: " + this.getPosition().toString());
+   }
    protected Point getPosition() {
       return position;
    }

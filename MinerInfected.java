@@ -5,16 +5,16 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class MinerNotFull extends Moving {
+public class MinerInfected extends Moving {
 
     private int resourceLimit;
     private int resourceCount;
     private PathingStrategy pathing = new SingleStepPathingStrategy();
     //private PathingStrategy pathing = new AStarPathingStrategy();
 
-    public MinerNotFull(String id, Point position,
-                  List<PImage> images, int resourceLimit, int resourceCount,
-                  int actionPeriod, int animationPeriod) {
+    public MinerInfected(String id, Point position,
+                        List<PImage> images, int resourceLimit, int resourceCount,
+                        int actionPeriod, int animationPeriod) {
         this.setId(id);
         this.setPosition(position);
         this.setImages(images);
@@ -28,31 +28,21 @@ public class MinerNotFull extends Moving {
 
 
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-        Optional<Entity> notFullTarget = world.findNearest(getPosition(),
-                Ore.class);
-        if (!notFullTarget.isPresent() ||
-                !moveTo(world, notFullTarget.get(), scheduler) ||
-                !transformNotFull(world, scheduler, imageStore)  ||
-                !transformInfected(world, scheduler, imageStore)) {
+        Optional<Entity> infectedTarget = world.findNearest(getPosition(),
+                MinerFull.class);
+        if (!infectedTarget.isPresent() ||
+                !moveTo(world, infectedTarget.get(), scheduler) ||
+                !transformNotFull(world, scheduler, imageStore)) {
             scheduler.scheduleEvent(this,
                     createActivityAction(world, imageStore),
                     getActionPeriod());
         }
-       // System.out.println("MinerNF: " + getPosition());
+        // System.out.println("MinerNF: " + getPosition());
     }
 
 
     public boolean moveTo(WorldModel world,
-                           Entity target, EventScheduler scheduler) {
-
-        if (adjacent(getPosition(), target.getPosition())) {
-            resourceCount += 1;
-            world.removeEntity(target);
-            scheduler.unscheduleAllEvents(target);
-
-            return true;
-        }
-        else {
+                          Entity target, EventScheduler scheduler) {
 
             Point nextPos = nextPosition(world, target.getPosition());
 
@@ -65,7 +55,7 @@ public class MinerNotFull extends Moving {
                 world.moveEntity(this, nextPos);
             }
             return false;
-        }
+
 
     }
 
@@ -73,28 +63,6 @@ public class MinerNotFull extends Moving {
                                      EventScheduler scheduler, ImageStore imageStore) {
         if (resourceCount >= resourceLimit) {
             MinerFull miner = createMinerFull(getId(), resourceLimit,
-                    getPosition(), getActionPeriod(), getAnimationPeriod(),
-                    getImages());
-
-            world.removeEntity(this);
-            scheduler.unscheduleAllEvents(this);
-
-            world.addEntity(miner);
-            miner.scheduleActions(scheduler, world, imageStore);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private boolean transformInfected(WorldModel world,
-                                      EventScheduler scheduler, ImageStore imageStore) {
-        System.out.println(world.getGasLocs());
-        boolean nearGas = adjacentToAny(getPosition(), world.getGasLocs());
-        //System.out.println("MinerNotFull " + getPosition().toString() + " " + nearGas);
-        if (nearGas) {
-            MinerInfected miner = createMinerInfected(getId(), resourceLimit,
                     getPosition(), getActionPeriod(), getAnimationPeriod(),
                     getImages());
 
@@ -146,8 +114,8 @@ public class MinerNotFull extends Moving {
 
 
     private MinerFull createMinerFull(String id, int resourceLimit,
-                                   Point position, int actionPeriod, int animationPeriod,
-                                   List<PImage> images) {
+                                      Point position, int actionPeriod, int animationPeriod,
+                                      List<PImage> images) {
         return new MinerFull(id, position, images,
                 resourceLimit, actionPeriod, animationPeriod);
     }
@@ -155,22 +123,12 @@ public class MinerNotFull extends Moving {
 
 
     public static MinerNotFull createMinerNotFull(String id, int resourceLimit,
-                                            Point position, int actionPeriod, int animationPeriod,
-                                            List<PImage> images)
+                                                  Point position, int actionPeriod, int animationPeriod,
+                                                  List<PImage> images)
     {
         return new MinerNotFull(id, position, images,
                 resourceLimit, 0, actionPeriod, animationPeriod);
     }
 
-    public static MinerInfected createMinerInfected(String id, int resourceLimit,
-                                                  Point position, int actionPeriod, int animationPeriod,
-                                                  List<PImage> images)
-    {
-        return new MinerInfected(id, position, images,
-                resourceLimit, 0, actionPeriod, animationPeriod);
-    }
-
 
 }
-
-

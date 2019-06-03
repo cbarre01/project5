@@ -29,16 +29,19 @@ public class MinerFull extends Moving {
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> fullTarget = world.findNearest(getPosition(),
                 Blacksmith.class);
-
-        if (fullTarget.isPresent() &&
-                moveTo(world, fullTarget.get(), scheduler)) {
-            transformFull(world, scheduler, imageStore);
-        } else {
-            scheduler.scheduleEvent(this,
-                    createActivityAction(world, imageStore),
-                    this.getActionPeriod());
+        if (!transformInfected(world, scheduler, imageStore)) {
+            if (fullTarget.isPresent() &&
+                    moveTo(world, fullTarget.get(), scheduler)) {
+                transformFull(world, scheduler, imageStore);
+            } else {
+                scheduler.scheduleEvent(this,
+                        createActivityAction(world, imageStore),
+                        this.getActionPeriod());
+            }
+            //System.out.println("MinerF: " + getPosition());
         }
-        //System.out.println("MinerF: " + getPosition());
+
+
     }
 
     public boolean moveTo(WorldModel world,
@@ -104,6 +107,28 @@ public class MinerFull extends Moving {
         }
         //System.out.println("Exit Next pos: " + newPos);
         return newPos;
+    }
+
+    private boolean transformInfected(WorldModel world,
+                                      EventScheduler scheduler, ImageStore imageStore) {
+        boolean nearGas = adjacentToAny(getPosition(), world.getGasLocs());
+        //System.out.println("MinerFull " + getPosition().toString() + " " + nearGas);
+        //System.out.println(nearGas);
+        if (nearGas) {
+            MinerInfected miner = MinerNotFull.createMinerInfected(getId(), resourceLimit,
+                    getPosition(), getActionPeriod(), getAnimationPeriod(),
+                    getImages());
+
+            world.removeEntity(this);
+            scheduler.unscheduleAllEvents(this);
+
+            world.addEntity(miner);
+            miner.scheduleActions(scheduler, world, imageStore);
+            return true;
+
+        }
+
+        return false;
     }
 
 

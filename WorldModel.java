@@ -1,6 +1,7 @@
 import processing.core.PImage;
 
 import java.util.*;
+import java.util.Arrays.*;
 
 final class WorldModel
 {
@@ -48,6 +49,9 @@ final class WorldModel
    private static final int GAS_ID = 1;
    private static final int GAS_COL = 2;
    private static final int GAS_ROW = 3;
+
+   private static final String INFECTED_KEY = "minerInfected";
+
 
 
 
@@ -162,6 +166,23 @@ final class WorldModel
       return properties.length == GAS_NUM_PROPERTIES;
    }
 
+   private boolean parseInfected(String[] properties, ImageStore imageStore)
+   {
+      if (properties.length == MINER_NUM_PROPERTIES)
+      {
+         Point pt = new Point(Integer.parseInt(properties[MINER_COL]),
+                 Integer.parseInt(properties[MINER_ROW]));
+         MinerNotFull entity = MinerNotFull.createMinerNotFull(properties[MINER_ID],
+                 Integer.parseInt(properties[MINER_LIMIT]),
+                 pt,
+                 Integer.parseInt(properties[MINER_ACTION_PERIOD]),
+                 Integer.parseInt(properties[MINER_ANIMATION_PERIOD]),
+                 imageStore.getImageList(INFECTED_KEY));
+         tryAddEntity(entity);
+      }
+
+      return properties.length == MINER_NUM_PROPERTIES;
+   }
    private boolean parseOre(String[] properties, ImageStore imageStore)
    {
       if (properties.length == ORE_NUM_PROPERTIES)
@@ -316,6 +337,7 @@ final class WorldModel
          setOccupancyCell(entity.getPosition(), entity);
          getEntities().add(entity);
       }
+      //System.out.println(entity);
    }
 
    public void moveEntity(Entity entity, Point pos)
@@ -505,4 +527,63 @@ public List<Point> allAdjacents(Point p) {
    return adjacents;
 }
 
+public boolean nearGas(Point p1)
+{
+   Optional<Entity> entity1 = getOccupant(new Point(p1.getX() + 1, p1.getY()));
+   Optional<Entity> entity2 = getOccupant(new Point(p1.getX() - 1, p1.getY()));
+   Optional<Entity> entity3 = getOccupant(new Point(p1.getX(), p1.getY() + 1));
+   Optional<Entity> entity4 = getOccupant(new Point(p1.getX(), p1.getY() - 1));
+
+   Entity entity1a= null;
+   Entity entity2a = null;
+   Entity entity3a = null;
+   Entity entity4a = null;
+
+   if (entity1.isPresent())
+   {
+      entity1a = entity1.get();
+   }
+
+   if (entity2.isPresent())
+   {
+      entity2a = entity2.get();
+   }
+
+   if (entity3.isPresent())
+   {
+      entity3a = entity3.get();
+   }
+
+   if (entity4.isPresent())
+   {
+      entity4a = entity4.get();
+   }
+   if (entity1a instanceof Gas || entity2a instanceof Gas || entity3a instanceof Gas || entity4a instanceof Gas)
+   {
+      return true;
+   }
+   return false;
+}
+
+   public void printEntities()
+   {
+      for (Entity e : entities)
+         System.out.println(e);
+   }
+
+
+   public ArrayList<Point> getGasLocs()
+   {
+      ArrayList<Point> gasLocs = new ArrayList<Point>();
+      for (Entity cur : getEntities())
+      {
+         //System.out.println(cur);
+         if (cur instanceof Gas)
+         {
+            gasLocs.add(cur.getPosition());
+         }
+      }
+      return gasLocs;
+
+   }
 }
