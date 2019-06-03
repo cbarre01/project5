@@ -23,7 +23,7 @@ abstract class Moving extends Animated {
                 System.out.println(pointlist);
             }
         }
-        System.out.println(adjacentTest);
+        //System.out.println(adjacentTest);
         return adjacentTest;
     }
 }

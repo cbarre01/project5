@@ -99,13 +99,16 @@ public class MinerNotFull extends Moving {
             world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
 
-            System.out.println(getPosition());
+            //System.out.println(getPosition());
             world.addEntity(miner);
             miner.scheduleActions(scheduler, world, imageStore);
+            //System.out.println("Transforming " + this.getClass());
             return true;
 
-        }
 
+
+        }
+        System.out.println("Calling transform from MinerNotFull, result: false");
         return false;
     }
 
@@ -117,7 +120,8 @@ public class MinerNotFull extends Moving {
         {
             public boolean test(Point p)
             {
-                if (world.isOccupied(p))
+                Optional<Entity> occupant = world.getOccupant(p);
+                if (occupant.isPresent())
                 {
                     return false;
                 }

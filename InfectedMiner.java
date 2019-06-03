@@ -9,8 +9,8 @@ public class InfectedMiner extends Moving {
 
     private int resourceLimit;
     private int resourceCount;
-    private PathingStrategy pathing = new SingleStepPathingStrategy();
-    //private PathingStrategy pathing = new AStarPathingStrategy();
+    //private PathingStrategy pathing = new SingleStepPathingStrategy();
+    private PathingStrategy pathing = new AStarPathingStrategy();
 
     public InfectedMiner(String id, Point position,
                         List<PImage> images, int resourceLimit, int resourceCount,
@@ -32,6 +32,10 @@ public class InfectedMiner extends Moving {
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> notFullTarget = world.findNearest(getPosition(),
                 MinerFull.class);
+        if (notFullTarget == null)
+        {
+            notFullTarget = world.findNearest(getPosition(), MinerNotFull.class);
+        }
         if (!notFullTarget.isPresent() ||
                 !moveTo(world, notFullTarget.get(), scheduler)) {
             scheduler.scheduleEvent(this,
@@ -39,18 +43,18 @@ public class InfectedMiner extends Moving {
                     getActionPeriod());
         }
         // System.out.println("MinerNF: " + getPosition());
-        System.out.println("MinerInf" + getPosition());
+        //System.out.println("MinerInf" + getPosition());
     }
 
 
     public boolean moveTo(WorldModel world,
                           Entity target, EventScheduler scheduler) {
 
+        Point newPos = target.getPosition();
         if (adjacent(getPosition(), target.getPosition())) {
-            resourceCount += 1;
             world.removeEntity(target);
             scheduler.unscheduleAllEvents(target);
-
+            world.moveEntity(this, newPos);
             return true;
         } else {
 
@@ -78,7 +82,8 @@ public class InfectedMiner extends Moving {
         {
             public boolean test(Point p)
             {
-                if (world.isOccupied(p))
+                Optional<Entity> occupant = world.getOccupant(p);
+                if (occupant.isPresent() && !(occupant.get() instanceof MinerFull))
                 {
                     return false;
                 }

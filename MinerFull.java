@@ -85,7 +85,8 @@ public class MinerFull extends Moving {
         {
             public boolean test(Point p)
             {
-                if (world.isOccupied(p))
+                Optional<Entity> occupant = world.getOccupant(p);
+                if (occupant.isPresent() && !(occupant.get() instanceof Gas))
                 {
                     return false;
                 }
@@ -153,7 +154,9 @@ public class MinerFull extends Moving {
             System.out.println(getPosition());
             world.addEntity(miner);
             miner.scheduleActions(scheduler, world, imageStore);
+            //System.out.println("Transforming " + this.getClass());
             return true;
+
 
         }
 

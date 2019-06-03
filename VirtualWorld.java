@@ -9,8 +9,8 @@ public final class VirtualWorld
 {
    private static final int TIMER_ACTION_PERIOD = 100;
 
-   private static final int VIEW_WIDTH = 640;
-   private static final int VIEW_HEIGHT = 480;
+   private static final int VIEW_WIDTH = 1000;
+   private static final int VIEW_HEIGHT = 1000;
    private static final int TILE_WIDTH = 32;
    private static final int TILE_HEIGHT = 32;
    private static final int WORLD_WIDTH_SCALE = 2;
@@ -75,6 +75,7 @@ public final class VirtualWorld
          }
       }
    }
+
 
    public void settings()
    {
