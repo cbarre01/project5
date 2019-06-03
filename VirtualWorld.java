@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import processing.core.*;
+import java.util.*;
 
 public final class VirtualWorld
    extends PApplet
@@ -14,6 +15,7 @@ public final class VirtualWorld
    private static final int TILE_HEIGHT = 32;
    private static final int WORLD_WIDTH_SCALE = 2;
    private static final int WORLD_HEIGHT_SCALE = 2;
+   private static final int TILE_SIZE = 32;
 
    private static final int VIEW_COLS = VIEW_WIDTH / TILE_WIDTH;
    private static final int VIEW_ROWS = VIEW_HEIGHT / TILE_HEIGHT;
@@ -32,6 +34,13 @@ public final class VirtualWorld
    private static final double FAST_SCALE = 0.5;
    private static final double FASTER_SCALE = 0.25;
    private static final double FASTEST_SCALE = 0.10;
+
+
+   private static final String GAS_KEY = "gas";
+   private static final int GAS_NUM_PROPERTIES = 4;
+   private static final int GAS_ID = 1;
+   private static final int GAS_COL = 2;
+   private static final int GAS_ROW = 3;
 
    private static double timeScale = 1.0;
 
@@ -129,6 +138,31 @@ public final class VirtualWorld
          }
          view.shiftView(dx, dy);
       }
+   }
+
+   private Point mouseToPoint(int x, int y)
+   {
+      return new Point(mouseX/TILE_SIZE, mouseY/TILE_SIZE);
+   }
+
+   public void mousePressed()
+   {
+      Point pressed = mouseToPoint(mouseX, mouseY);
+      List<Point> allAdjacents = world.allAdjacents(pressed);
+
+         Entity[] newGasArray = new Entity[9];
+         for (int i = 0; i < 9; i++)
+         {
+            newGasArray[i] = Gas.createGas(GAS_ID + " " + String.valueOf(i),
+                   allAdjacents.get(i),
+                    imageStore.getImageList(GAS_KEY));
+
+            world.addEntity(newGasArray[i]);
+         }
+
+
+
+
    }
 
    private static PImage createImageColored(int width, int height, int color)

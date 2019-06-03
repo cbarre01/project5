@@ -2,11 +2,11 @@ import processing.core.PImage;
 
 import java.util.List;
 
-public class Obstacle extends Entity {
+public class Gas extends Entity {
 
 
 
-    public Obstacle(String id, Point position,
+    public Gas(String id, Point position,
                     List<PImage> images) {
         this.setPosition(position);
         this.setImages(images);
@@ -15,7 +15,7 @@ public class Obstacle extends Entity {
 
 
 
-    public static Obstacle createObstacle(String id, Point position,
+    public static Obstacle createGas(String id, Point position,
                                           List<PImage> images)
     {
         return new Obstacle(id, position, images

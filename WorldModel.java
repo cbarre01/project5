@@ -41,6 +41,16 @@ final class WorldModel
    private static final int VEIN_ROW = 3;
    private static final int VEIN_ACTION_PERIOD = 4;
    private static final int ORE_REACH = 1;
+
+//new stuff
+   private static final String GAS_KEY = "gas";
+   private static final int GAS_NUM_PROPERTIES = 4;
+   private static final int GAS_ID = 1;
+   private static final int GAS_COL = 2;
+   private static final int GAS_ROW = 3;
+
+
+
    private int numRows;
    private int numCols;
    private Set<Entity> entities;
@@ -82,6 +92,8 @@ final class WorldModel
                return parseSmith(properties, imageStore);
             case VEIN_KEY:
                return parseVein(properties, imageStore);
+            case GAS_KEY:
+               return parseGas(properties, imageStore);
          }
       }
 
@@ -133,6 +145,21 @@ final class WorldModel
       }
 
       return properties.length == OBSTACLE_NUM_PROPERTIES;
+   }
+
+   private boolean parseGas(String[] properties, ImageStore imageStore)
+   {
+      if (properties.length == GAS_NUM_PROPERTIES)
+      {
+         Point pt = new Point(
+                 Integer.parseInt(properties[GAS_COL]),
+                 Integer.parseInt(properties[GAS_ROW]));
+         Obstacle entity = Obstacle.createObstacle(properties[GAS_ID],
+                 pt, imageStore.getImageList(GAS_KEY));
+         tryAddEntity(entity);
+      }
+
+      return properties.length == GAS_NUM_PROPERTIES;
    }
 
    private boolean parseOre(String[] properties, ImageStore imageStore)
@@ -464,6 +491,18 @@ public boolean neighbors(Point p1, Point p2)
            p1.getX() == p2.getX() && p1.getY()-1 == p2.getY();
 }
 
-
+public List<Point> allAdjacents(Point p) {
+   ArrayList<Point> adjacents = new ArrayList<>();
+   adjacents.add(new Point(p.getX(), p.getY()));
+   adjacents.add(new Point(p.getX(), p.getY() + 1));
+   adjacents.add(new Point(p.getX(), p.getY() - 1));
+   adjacents.add(new Point(p.getX() - 1, p.getY() + 1));
+   adjacents.add(new Point(p.getX() - 1, p.getY()));
+   adjacents.add(new Point(p.getX() - 1, p.getY() - 1));
+   adjacents.add(new Point(p.getX() + 1, p.getY() + 1));
+   adjacents.add(new Point(p.getX() + 1, p.getY()));
+   adjacents.add(new Point(p.getX() + 1, p.getY() - 1));
+   return adjacents;
+}
 
 }
