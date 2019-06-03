@@ -6,6 +6,9 @@ import java.util.function.*;
 
 public class MinerFull extends Moving {
 
+
+    private static final String INFECTED_KEY = "infectedMiner";
+
     private int resourceLimit;
     private PathingStrategy pathing = new SingleStepPathingStrategy();
     //private PathingStrategy pathing = new AStarPathingStrategy();
@@ -29,16 +32,17 @@ public class MinerFull extends Moving {
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> fullTarget = world.findNearest(getPosition(),
                 Blacksmith.class);
-
-        if (fullTarget.isPresent() &&
-                moveTo(world, fullTarget.get(), scheduler)) {
-            transformFull(world, scheduler, imageStore);
-        } else {
-            scheduler.scheduleEvent(this,
-                    createActivityAction(world, imageStore),
-                    this.getActionPeriod());
+        if (!transformInfected(world, scheduler, imageStore)) {
+            if (fullTarget.isPresent() &&
+                    moveTo(world, fullTarget.get(), scheduler)) {
+                transformFull(world, scheduler, imageStore);
+            } else {
+                scheduler.scheduleEvent(this,
+                        createActivityAction(world, imageStore),
+                        this.getActionPeriod());
+            }
+            //System.out.println("MinerF: " + getPosition());
         }
-        //System.out.println("MinerF: " + getPosition());
     }
 
     public boolean moveTo(WorldModel world,
@@ -135,6 +139,26 @@ public class MinerFull extends Moving {
                 resourceLimit, 0, actionPeriod, animationPeriod);
     }
 
+
+    private boolean transformInfected(WorldModel world,
+                                      EventScheduler scheduler, ImageStore imageStore) {
+        if (this.adjacentToAny(world.getGasLocs())) {
+            InfectedMiner miner = InfectedMiner.createInfectedMiner(getId(), resourceLimit,
+                    getPosition(), getActionPeriod(), getAnimationPeriod(),
+                    imageStore.getImageList(INFECTED_KEY));
+
+            world.removeEntity(this);
+            scheduler.unscheduleAllEvents(this);
+
+            System.out.println(getPosition());
+            world.addEntity(miner);
+            miner.scheduleActions(scheduler, world, imageStore);
+            return true;
+
+        }
+
+        return false;
+    }
 
 
 
