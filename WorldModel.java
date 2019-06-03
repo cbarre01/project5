@@ -49,6 +49,8 @@ final class WorldModel
    private static final int GAS_COL = 2;
    private static final int GAS_ROW = 3;
 
+   private static final String INFECTED_KEY = "infectedMiner";
+
 
 
    private int numRows;
@@ -504,5 +506,20 @@ public List<Point> allAdjacents(Point p) {
    adjacents.add(new Point(p.getX() + 1, p.getY() - 1));
    return adjacents;
 }
+
+   public ArrayList<Point> getGasLocs()
+   {
+      ArrayList<Point> gasLocs = new ArrayList<Point>();
+      for (Entity cur : getEntities())
+      {
+         //System.out.println(cur);
+         if (cur instanceof Gas)
+         {
+            gasLocs.add(cur.getPosition());
+         }
+      }
+      return gasLocs;
+
+   }
 
 }
