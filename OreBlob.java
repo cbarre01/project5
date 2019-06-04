@@ -49,7 +49,7 @@ public class OreBlob extends Moving {
     }
 
     public boolean moveTo(WorldModel world,
-                           Entity target, EventScheduler scheduler) {
+                          Entity target, EventScheduler scheduler) {
         if (adjacent(getPosition(), target.getPosition())) {
             world.removeEntity(target);
             scheduler.unscheduleAllEvents(target);

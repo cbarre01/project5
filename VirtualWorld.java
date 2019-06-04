@@ -42,6 +42,13 @@ public final class VirtualWorld
    private static final int GAS_COL = 2;
    private static final int GAS_ROW = 3;
 
+   private static final String FROG_KEY = "frog";
+   private static final int FROG_NUM_PROPERTIES = 7;
+   private static final int FROG_ID = 1;
+   private static final int FROG_COL = 2;
+   private static final int FROG_ROW = 3;
+   private static final int FROG_ACTION_PERIOD = 4;
+   private static final int FROG_ANIMATION_PERIOD = 6;
    private static double timeScale = 1.0;
 
    private ImageStore imageStore;
@@ -83,7 +90,7 @@ public final class VirtualWorld
    }
 
    /*
-      Processing entry point for "sketch" setup.
+      Processing entry point for "sketch" setup.mouseToPoint
    */
    public void setup()
    {
@@ -149,6 +156,7 @@ public final class VirtualWorld
    public void mousePressed()
    {
       Point pressed = mouseToPoint(mouseX, mouseY);
+      Point newPressed = mouseToPoint(mouseX +4, mouseY +4);
       List<Point> allAdjacents = world.allAdjacents(pressed);
 
          Entity[] newGasArray = new Entity[9];
@@ -161,9 +169,10 @@ public final class VirtualWorld
             world.addEntity(newGasArray[i]);
          }
 
-
-
-
+         PoisonFrog frog = PoisonFrog.createPoisonFrog(FROG_KEY, newPressed,
+                 imageStore.getImageList(FROG_KEY),FROG_ACTION_PERIOD, FROG_ANIMATION_PERIOD);
+                  world.addEntity(frog);
+                  frog.scheduleActions(scheduler, world, imageStore);
    }
 
    private static PImage createImageColored(int width, int height, int color)

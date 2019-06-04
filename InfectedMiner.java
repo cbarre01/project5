@@ -13,8 +13,8 @@ public class InfectedMiner extends Moving {
     private PathingStrategy pathing = new AStarPathingStrategy();
 
     public InfectedMiner(String id, Point position,
-                        List<PImage> images, int resourceLimit, int resourceCount,
-                        int actionPeriod, int animationPeriod) {
+                         List<PImage> images, int resourceLimit, int resourceCount,
+                         int actionPeriod, int animationPeriod) {
         this.setId(id);
         this.setPosition(position);
         this.setImages(images);
@@ -32,6 +32,7 @@ public class InfectedMiner extends Moving {
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> infectedTarget = world.findNearest(getPosition(),
                 MinerFull.class);
+
         if (!infectedTarget.isPresent())
         {
             infectedTarget = world.findNearest(getPosition(), MinerNotFull.class);
@@ -127,8 +128,8 @@ public class InfectedMiner extends Moving {
     }
 
     public static InfectedMiner createInfectedMiner(String id, int resourceLimit,
-                                                  Point position, int actionPeriod, int animationPeriod,
-                                                  List<PImage> images)
+                                                    Point position, int actionPeriod, int animationPeriod,
+                                                    List<PImage> images)
     {
         return new InfectedMiner(id, position, images,
                 resourceLimit, 0, actionPeriod, animationPeriod);

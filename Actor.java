@@ -16,6 +16,7 @@ abstract class Actor extends Entity {
     protected int getActionPeriod() {
         return actionPeriod;
     }
+
     protected abstract void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler);
 
     public void scheduleActions(EventScheduler scheduler, WorldModel world, ImageStore imageStore)
