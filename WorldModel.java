@@ -5,11 +5,13 @@ import java.util.*;
 final class WorldModel
 {
    private static final int PROPERTY_KEY = 0;
+
    private static final String BGND_KEY = "background";
    private static final int BGND_NUM_PROPERTIES = 4;
    private static final int BGND_ID = 1;
    private static final int BGND_COL = 2;
    private static final int BGND_ROW = 3;
+
    private static final String MINER_KEY = "miner";
    private static final int MINER_NUM_PROPERTIES = 7;
    private static final int MINER_ID = 1;
@@ -18,28 +20,33 @@ final class WorldModel
    private static final int MINER_LIMIT = 4;
    private static final int MINER_ACTION_PERIOD = 5;
    private static final int MINER_ANIMATION_PERIOD = 6;
+
    private static final String OBSTACLE_KEY = "obstacle";
    private static final int OBSTACLE_NUM_PROPERTIES = 4;
    private static final int OBSTACLE_ID = 1;
    private static final int OBSTACLE_COL = 2;
    private static final int OBSTACLE_ROW = 3;
+
    private static final String ORE_KEY = "ore";
    private static final int ORE_NUM_PROPERTIES = 5;
    private static final int ORE_ID = 1;
    private static final int ORE_COL = 2;
    private static final int ORE_ROW = 3;
    private static final int ORE_ACTION_PERIOD = 4;
+
    private static final String SMITH_KEY = "blacksmith";
    private static final int SMITH_NUM_PROPERTIES = 4;
    private static final int SMITH_ID = 1;
    private static final int SMITH_COL = 2;
    private static final int SMITH_ROW = 3;
+
    private static final String VEIN_KEY = "vein";
    private static final int VEIN_NUM_PROPERTIES = 5;
    private static final int VEIN_ID = 1;
    private static final int VEIN_COL = 2;
    private static final int VEIN_ROW = 3;
    private static final int VEIN_ACTION_PERIOD = 4;
+
    private static final int ORE_REACH = 1;
 
 //new stuff
@@ -48,6 +55,14 @@ final class WorldModel
    private static final int GAS_ID = 1;
    private static final int GAS_COL = 2;
    private static final int GAS_ROW = 3;
+
+   private static final String FROG_KEY = "frog";
+   private static final int FROG_NUM_PROPERTIES = 7;
+   private static final int FROG_ID = 1;
+   private static final int FROG_COL = 2;
+   private static final int FROG_ROW = 3;
+   private static final int FROG_ACTION_PERIOD = 5;
+   private static final int FROG_ANIMATION_PERIOD = 6;
 
    private static final String INFECTED_KEY = "infectedMiner";
 
@@ -94,8 +109,10 @@ final class WorldModel
                return parseSmith(properties, imageStore);
             case VEIN_KEY:
                return parseVein(properties, imageStore);
-            case GAS_KEY:
-               return parseGas(properties, imageStore);
+//            case GAS_KEY:
+//               return parseGas(properties, imageStore);
+//            case FROG_KEY:
+//               return parseFrog(properties, imageStore);
          }
       }
 
@@ -162,6 +179,22 @@ final class WorldModel
       }
 
       return properties.length == GAS_NUM_PROPERTIES;
+   }
+
+   private boolean parseFrog(String[] properties, ImageStore imageStore)
+   {
+      if (properties.length == FROG_NUM_PROPERTIES)
+      {Point pt = new Point(Integer.parseInt(properties[FROG_COL]),
+              Integer.parseInt(properties[FROG_ROW]));
+         PoisonFrog entity = PoisonFrog.createPoisonFrog(properties[FROG_ID],
+                 pt,
+                 imageStore.getImageList(FROG_KEY),
+                 Integer.parseInt(properties[FROG_ACTION_PERIOD]),
+                 Integer.parseInt(properties[FROG_ANIMATION_PERIOD]));
+         tryAddEntity(entity);
+      }
+      return properties.length == FROG_NUM_PROPERTIES;
+
    }
 
    private boolean parseOre(String[] properties, ImageStore imageStore)

@@ -10,8 +10,8 @@ public class MinerFull extends Moving {
     private static final String INFECTED_KEY = "infectedMiner";
 
     private int resourceLimit;
-    private PathingStrategy pathing = new SingleStepPathingStrategy();
-    //private PathingStrategy pathing = new AStarPathingStrategy();
+    //private PathingStrategy pathing = new SingleStepPathingStrategy();
+    private PathingStrategy pathing = new AStarPathingStrategy();
 
     public MinerFull(String id, Point position,
                      List<PImage> images, int resourceLimit,
@@ -46,7 +46,7 @@ public class MinerFull extends Moving {
     }
 
     public boolean moveTo(WorldModel world,
-                           Entity target, EventScheduler scheduler) {
+                          Entity target, EventScheduler scheduler) {
         if (adjacent(getPosition(), target.getPosition())) {
             return true;
         } else {
@@ -112,26 +112,26 @@ public class MinerFull extends Moving {
     }
 
 
-/*
-    public Point nextPosition(WorldModel world,
-                               Point destPos) {
-        int horiz = Integer.signum(destPos.getX() - getPosition().getX());
-        Point newPos = new Point(getPosition().getX() + horiz,
-                getPosition().getY());
+    /*
+        public Point nextPosition(WorldModel world,
+                                   Point destPos) {
+            int horiz = Integer.signum(destPos.getX() - getPosition().getX());
+            Point newPos = new Point(getPosition().getX() + horiz,
+                    getPosition().getY());
 
-        if (horiz == 0 || world.isOccupied(newPos)) {
-            int vert = Integer.signum(destPos.getY() - getPosition().getY());
-            newPos = new Point(getPosition().getX(),
-                    getPosition().getY() + vert);
+            if (horiz == 0 || world.isOccupied(newPos)) {
+                int vert = Integer.signum(destPos.getY() - getPosition().getY());
+                newPos = new Point(getPosition().getX(),
+                        getPosition().getY() + vert);
 
-            if (vert == 0 || world.isOccupied(newPos)) {
-                newPos = getPosition();
+                if (vert == 0 || world.isOccupied(newPos)) {
+                    newPos = getPosition();
+                }
             }
-        }
 
-        return newPos;
-    }
-*/
+            return newPos;
+        }
+    */
     public static MinerNotFull createMinerNotFull(String id, int resourceLimit,
                                                   Point position, int actionPeriod, int animationPeriod,
                                                   List<PImage> images)

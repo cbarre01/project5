@@ -9,8 +9,8 @@ public class OreBlob extends Moving {
     private static final String QUAKE_ID = "quake";
     private static final int QUAKE_ACTION_PERIOD = 1100;
     private static final int QUAKE_ANIMATION_PERIOD = 100;
-    private PathingStrategy pathing = new SingleStepPathingStrategy();
-    //private PathingStrategy pathing = new AStarPathingStrategy();
+    //private PathingStrategy pathing = new SingleStepPathingStrategy();
+    private PathingStrategy pathing = new AStarPathingStrategy();
 
 
 
@@ -49,7 +49,7 @@ public class OreBlob extends Moving {
     }
 
     public boolean moveTo(WorldModel world,
-                           Entity target, EventScheduler scheduler) {
+                          Entity target, EventScheduler scheduler) {
         if (adjacent(getPosition(), target.getPosition())) {
             world.removeEntity(target);
             scheduler.unscheduleAllEvents(target);

@@ -11,12 +11,12 @@ public class MinerNotFull extends Moving {
     private static final String INFECTED_KEY = "infectedMiner";
     private int resourceLimit;
     private int resourceCount;
-    private PathingStrategy pathing = new SingleStepPathingStrategy();
-    //private PathingStrategy pathing = new AStarPathingStrategy();
+    //private PathingStrategy pathing = new SingleStepPathingStrategy();
+    private PathingStrategy pathing = new AStarPathingStrategy();
 
     public MinerNotFull(String id, Point position,
-                  List<PImage> images, int resourceLimit, int resourceCount,
-                  int actionPeriod, int animationPeriod) {
+                        List<PImage> images, int resourceLimit, int resourceCount,
+                        int actionPeriod, int animationPeriod) {
         this.setId(id);
         this.setPosition(position);
         this.setImages(images);
@@ -45,7 +45,7 @@ public class MinerNotFull extends Moving {
 
 
     public boolean moveTo(WorldModel world,
-                           Entity target, EventScheduler scheduler) {
+                          Entity target, EventScheduler scheduler) {
 
         if (adjacent(getPosition(), target.getPosition())) {
             resourceCount += 1;
@@ -90,7 +90,7 @@ public class MinerNotFull extends Moving {
     }
 
     private boolean transformInfected(WorldModel world,
-                                     EventScheduler scheduler, ImageStore imageStore) {
+                                      EventScheduler scheduler, ImageStore imageStore) {
         if (this.adjacentToAny(world.getGasLocs())) {
             InfectedMiner miner = InfectedMiner.createInfectedMiner(getId(), resourceLimit,
                     getPosition(), getActionPeriod(), getAnimationPeriod(),
@@ -149,8 +149,8 @@ public class MinerNotFull extends Moving {
 
 
     private MinerFull createMinerFull(String id, int resourceLimit,
-                                   Point position, int actionPeriod, int animationPeriod,
-                                   List<PImage> images) {
+                                      Point position, int actionPeriod, int animationPeriod,
+                                      List<PImage> images) {
         return new MinerFull(id, position, images,
                 resourceLimit, actionPeriod, animationPeriod);
     }
@@ -158,8 +158,8 @@ public class MinerNotFull extends Moving {
 
 
     public static MinerNotFull createMinerNotFull(String id, int resourceLimit,
-                                            Point position, int actionPeriod, int animationPeriod,
-                                            List<PImage> images)
+                                                  Point position, int actionPeriod, int animationPeriod,
+                                                  List<PImage> images)
     {
         return new MinerNotFull(id, position, images,
                 resourceLimit, 0, actionPeriod, animationPeriod);
