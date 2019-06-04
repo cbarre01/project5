@@ -10,8 +10,8 @@ public class MinerFull extends Moving {
     private static final String INFECTED_KEY = "infectedMiner";
 
     private int resourceLimit;
-    private PathingStrategy pathing = new SingleStepPathingStrategy();
-    //private PathingStrategy pathing = new AStarPathingStrategy();
+    //private PathingStrategy pathing = new SingleStepPathingStrategy();
+    private PathingStrategy pathing = new AStarPathingStrategy();
 
     public MinerFull(String id, Point position,
                      List<PImage> images, int resourceLimit,

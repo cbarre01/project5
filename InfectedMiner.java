@@ -30,14 +30,17 @@ public class InfectedMiner extends Moving {
 
 
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-        Optional<Entity> notFullTarget = world.findNearest(getPosition(),
+        Optional<Entity> infectedTarget = world.findNearest(getPosition(),
                 MinerFull.class);
-        if (notFullTarget == null)
+        if (!infectedTarget.isPresent())
         {
-            notFullTarget = world.findNearest(getPosition(), MinerNotFull.class);
+            infectedTarget = world.findNearest(getPosition(), MinerNotFull.class);
         }
-        if (!notFullTarget.isPresent() ||
-                !moveTo(world, notFullTarget.get(), scheduler)) {
+
+
+        if (!infectedTarget.isPresent() ||
+                !moveTo(world, infectedTarget.get(), scheduler) ||
+                !eatMiner(world, infectedTarget.get(), scheduler)){
             scheduler.scheduleEvent(this,
                     createActivityAction(world, imageStore),
                     getActionPeriod());
@@ -107,6 +110,20 @@ public class InfectedMiner extends Moving {
         }
         //System.out.println(" Exit Next pos: " + newPos);
         return newPos;
+    }
+
+    public boolean eatMiner(WorldModel world, Entity target, EventScheduler scheduler)
+    {
+        if (adjacent(getPosition(), target.getPosition()))
+        {
+            world.removeEntity(this);
+            scheduler.unscheduleAllEvents(this);
+
+            //world.addEntity(miner);
+            //miner.scheduleActions(scheduler, world, imageStore);
+            return true;
+        }
+        return false;
     }
 
     public static InfectedMiner createInfectedMiner(String id, int resourceLimit,
