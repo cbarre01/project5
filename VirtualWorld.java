@@ -51,10 +51,15 @@ public final class VirtualWorld
    private static final int FROG_ANIMATION_PERIOD = 6;
    private static double timeScale = 1.0;
 
+   private static final String CONTROLLED_KEY = "controlledMiner";
+
+
+
    private ImageStore imageStore;
    private WorldModel world;
    private WorldView view;
    private EventScheduler scheduler;
+   private ControlledMiner mainChar;
 
    private long next_time;
 
@@ -102,10 +107,16 @@ public final class VirtualWorld
          TILE_WIDTH, TILE_HEIGHT);
       this.scheduler = new EventScheduler(timeScale);
 
+      mainChar = ControlledMiner.createControlledMiner(CONTROLLED_KEY, new Point(1, 1),
+           imageStore.getImageList(CONTROLLED_KEY));
+      world.addEntity(mainChar);
+
       loadImages(IMAGE_LIST_FILE_NAME, imageStore, this);
       loadWorld(world, LOAD_FILE_NAME, imageStore);
 
       scheduleActions(world, scheduler, imageStore);
+
+
 
       next_time = System.currentTimeMillis() + TIMER_ACTION_PERIOD;
    }
@@ -124,11 +135,11 @@ public final class VirtualWorld
 
    public void keyPressed()
    {
+      System.out.println(keyCode);
       if (key == CODED)
       {
          int dx = 0;
          int dy = 0;
-
          switch (keyCode)
          {
             case UP:
@@ -143,8 +154,25 @@ public final class VirtualWorld
             case RIGHT:
                dx = 1;
                break;
+
          }
          view.shiftView(dx, dy);
+      }
+
+      switch (keyCode) {
+
+      case 65: //A
+         mainChar.moveLeft(world);
+         break;
+      case 83: //S
+         mainChar.moveDown(world);
+         break;
+      case 68: //D
+         mainChar.moveRight(world);
+         break;
+      case 87: //W
+         mainChar.moveUp(world);
+         break;
       }
    }
 
@@ -169,10 +197,8 @@ public final class VirtualWorld
             world.addEntity(newGasArray[i]);
          }
 
-         PoisonFrog frog = PoisonFrog.createPoisonFrog(FROG_KEY, newPressed,
-                 imageStore.getImageList(FROG_KEY),FROG_ACTION_PERIOD, FROG_ANIMATION_PERIOD);
-                  world.addEntity(frog);
-                  frog.scheduleActions(scheduler, world, imageStore);
+
+
    }
 
    private static PImage createImageColored(int width, int height, int color)

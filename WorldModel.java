@@ -64,7 +64,12 @@ final class WorldModel
    private static final int FROG_ACTION_PERIOD = 5;
    private static final int FROG_ANIMATION_PERIOD = 6;
 
-   private static final String INFECTED_KEY = "infectedMiner";
+   private static final String CONTROLLED_KEY = "controlledMiner";
+   private static final int CONTROLLED_NUM_PROPERTIES = 5;
+   private static final int CONTROLLED_ID = 1;
+   private static final int CONTROLLED_COL = 2;
+   private static final int CONTROLLED_ROW = 3;
+   private static final int CONTROLLED_ACTION_PERIOD = 4;
 
 
 
@@ -109,8 +114,8 @@ final class WorldModel
                return parseSmith(properties, imageStore);
             case VEIN_KEY:
                return parseVein(properties, imageStore);
-//            case GAS_KEY:
-//               return parseGas(properties, imageStore);
+            case CONTROLLED_KEY:
+               return parseControlled(properties, imageStore);
 //            case FROG_KEY:
 //               return parseFrog(properties, imageStore);
          }
@@ -175,6 +180,21 @@ final class WorldModel
                  Integer.parseInt(properties[GAS_ROW]));
          Obstacle entity = Obstacle.createObstacle(properties[GAS_ID],
                  pt, imageStore.getImageList(GAS_KEY));
+         tryAddEntity(entity);
+      }
+
+      return properties.length == GAS_NUM_PROPERTIES;
+   }
+
+   private boolean parseControlled(String[] properties, ImageStore imageStore)
+   {
+      if (properties.length == CONTROLLED_NUM_PROPERTIES)
+      {
+         Point pt = new Point(
+                 Integer.parseInt(properties[CONTROLLED_COL]),
+                 Integer.parseInt(properties[CONTROLLED_ROW]));
+         ControlledMiner entity = ControlledMiner.createControlledMiner(properties[CONTROLLED_ID],
+                 pt, imageStore.getImageList(CONTROLLED_KEY));
          tryAddEntity(entity);
       }
 
