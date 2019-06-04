@@ -19,11 +19,9 @@ abstract class Moving extends Animated {
                     (getPosition().getY() == p2.getY() && Math.abs(getPosition().getX() - p2.getX()) == 1))
             {
                 adjacentTest = true;
-                System.out.println(this.getPosition());
-                System.out.println(pointlist);
+
             }
         }
-        //System.out.println(adjacentTest);
         return adjacentTest;
     }
 }

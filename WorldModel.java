@@ -49,7 +49,7 @@ final class WorldModel
 
    private static final int ORE_REACH = 1;
 
-//new stuff
+   //new stuff
    private static final String GAS_KEY = "gas";
    private static final int GAS_NUM_PROPERTIES = 4;
    private static final int GAS_ID = 1;
@@ -64,7 +64,12 @@ final class WorldModel
    private static final int FROG_ACTION_PERIOD = 5;
    private static final int FROG_ANIMATION_PERIOD = 6;
 
-   private static final String INFECTED_KEY = "infectedMiner";
+   private static final String CONTROLLED_KEY = "controlledMiner";
+   private static final int CONTROLLED_NUM_PROPERTIES = 5;
+   private static final int CONTROLLED_ID = 1;
+   private static final int CONTROLLED_COL = 2;
+   private static final int CONTROLLED_ROW = 3;
+   private static final int CONTROLLED_ACTION_PERIOD = 4;
 
 
 
@@ -109,8 +114,8 @@ final class WorldModel
                return parseSmith(properties, imageStore);
             case VEIN_KEY:
                return parseVein(properties, imageStore);
-//            case GAS_KEY:
-//               return parseGas(properties, imageStore);
+            case CONTROLLED_KEY:
+               return parseControlled(properties, imageStore);
 //            case FROG_KEY:
 //               return parseFrog(properties, imageStore);
          }
@@ -175,6 +180,21 @@ final class WorldModel
                  Integer.parseInt(properties[GAS_ROW]));
          Obstacle entity = Obstacle.createObstacle(properties[GAS_ID],
                  pt, imageStore.getImageList(GAS_KEY));
+         tryAddEntity(entity);
+      }
+
+      return properties.length == GAS_NUM_PROPERTIES;
+   }
+
+   private boolean parseControlled(String[] properties, ImageStore imageStore)
+   {
+      if (properties.length == CONTROLLED_NUM_PROPERTIES)
+      {
+         Point pt = new Point(
+                 Integer.parseInt(properties[CONTROLLED_COL]),
+                 Integer.parseInt(properties[CONTROLLED_ROW]));
+         ControlledMiner entity = ControlledMiner.createControlledMiner(properties[CONTROLLED_ID],
+                 pt, imageStore.getImageList(CONTROLLED_KEY));
          tryAddEntity(entity);
       }
 
@@ -291,7 +311,7 @@ final class WorldModel
    }
 
    public Optional<Entity> findNearest(Point pos,
-                                              Class c)
+                                       Class c)
    {
       List<Entity> ofType = new LinkedList<>();
       for (Entity entity : getEntities())
@@ -476,69 +496,69 @@ final class WorldModel
       return entities;
    }
 
-/*
-   public boolean reachableBFS(Point p1, Point p2)
-   {
-      boolean[][] visitedD = new boolean[numRows][numCols];
-      Queue<Point> toVisit = new LinkedList<>();
-      boolean found = false;
+   /*
+      public boolean reachableBFS(Point p1, Point p2)
+      {
+         boolean[][] visitedD = new boolean[numRows][numCols];
+         Queue<Point> toVisit = new LinkedList<>();
+         boolean found = false;
 
-      ArrayList<Point> neighbors = new ArrayList<>();
-      neighbors.add(new Point(p1.getX() - 1, p1.getY()));
-      neighbors.add(new Point(p1.getX() + 1, p1.getY()));
-      neighbors.add(new Point(p1.getX(), p1.getY() - 1));
-      neighbors.add(new Point(p1.getX(), p1.getY() + 1));
-      for (Point p : neighbors)
-      {
-         if (withinBounds(p) && !visitedD[p.getX()][p.getY()])
+         ArrayList<Point> neighbors = new ArrayList<>();
+         neighbors.add(new Point(p1.getX() - 1, p1.getY()));
+         neighbors.add(new Point(p1.getX() + 1, p1.getY()));
+         neighbors.add(new Point(p1.getX(), p1.getY() - 1));
+         neighbors.add(new Point(p1.getX(), p1.getY() + 1));
+         for (Point p : neighbors)
          {
-            toVisit.add(p);
-         }
-      }
-      while ((toVisit.size() > 0) && (found = false))
-      {
-         Point cur = toVisit.remove();
-         if (cur.equals(p2))
-         {
-            found = true;
-         }
-         else {
-            ArrayList<Point> neighbors1 = new ArrayList<>();
-            neighbors1.add(new Point(p1.getX() - 1, p1.getY()));
-            neighbors1.add(new Point(p1.getX() + 1, p1.getY()));
-            neighbors1.add(new Point(p1.getX(), p1.getY() - 1));
-            neighbors1.add(new Point(p1.getX(), p1.getY() + 1));
-            for (Point p : neighbors1) {
-               if (withinBounds(p) && !visitedD[p.getX()][p.getY()]) {
-                  toVisit.add(p);
-               }
+            if (withinBounds(p) && !visitedD[p.getX()][p.getY()])
+            {
+               toVisit.add(p);
             }
          }
-         visitedD[cur.getX()][cur.getY()] = true;
-      }
-      return found;
-*/
-public boolean neighbors(Point p1, Point p2)
-{
-   return p1.getX()+1 == p2.getX() && p1.getY() == p2.getY() ||
-           p1.getX()-1 == p2.getX() && p1.getY() == p2.getY() ||
-           p1.getX() == p2.getX() && p1.getY()+1 == p2.getY() ||
-           p1.getX() == p2.getX() && p1.getY()-1 == p2.getY();
-}
+         while ((toVisit.size() > 0) && (found = false))
+         {
+            Point cur = toVisit.remove();
+            if (cur.equals(p2))
+            {
+               found = true;
+            }
+            else {
+               ArrayList<Point> neighbors1 = new ArrayList<>();
+               neighbors1.add(new Point(p1.getX() - 1, p1.getY()));
+               neighbors1.add(new Point(p1.getX() + 1, p1.getY()));
+               neighbors1.add(new Point(p1.getX(), p1.getY() - 1));
+               neighbors1.add(new Point(p1.getX(), p1.getY() + 1));
+               for (Point p : neighbors1) {
+                  if (withinBounds(p) && !visitedD[p.getX()][p.getY()]) {
+                     toVisit.add(p);
+                  }
+               }
+            }
+            visitedD[cur.getX()][cur.getY()] = true;
+         }
+         return found;
+   */
+   public boolean neighbors(Point p1, Point p2)
+   {
+      return p1.getX()+1 == p2.getX() && p1.getY() == p2.getY() ||
+              p1.getX()-1 == p2.getX() && p1.getY() == p2.getY() ||
+              p1.getX() == p2.getX() && p1.getY()+1 == p2.getY() ||
+              p1.getX() == p2.getX() && p1.getY()-1 == p2.getY();
+   }
 
-public List<Point> allAdjacents(Point p) {
-   ArrayList<Point> adjacents = new ArrayList<>();
-   adjacents.add(new Point(p.getX(), p.getY()));
-   adjacents.add(new Point(p.getX(), p.getY() + 1));
-   adjacents.add(new Point(p.getX(), p.getY() - 1));
-   adjacents.add(new Point(p.getX() - 1, p.getY() + 1));
-   adjacents.add(new Point(p.getX() - 1, p.getY()));
-   adjacents.add(new Point(p.getX() - 1, p.getY() - 1));
-   adjacents.add(new Point(p.getX() + 1, p.getY() + 1));
-   adjacents.add(new Point(p.getX() + 1, p.getY()));
-   adjacents.add(new Point(p.getX() + 1, p.getY() - 1));
-   return adjacents;
-}
+   public List<Point> allAdjacents(Point p) {
+      ArrayList<Point> adjacents = new ArrayList<>();
+      adjacents.add(new Point(p.getX(), p.getY()));
+      adjacents.add(new Point(p.getX(), p.getY() + 1));
+      adjacents.add(new Point(p.getX(), p.getY() - 1));
+      adjacents.add(new Point(p.getX() - 1, p.getY() + 1));
+      adjacents.add(new Point(p.getX() - 1, p.getY()));
+      adjacents.add(new Point(p.getX() - 1, p.getY() - 1));
+      adjacents.add(new Point(p.getX() + 1, p.getY() + 1));
+      adjacents.add(new Point(p.getX() + 1, p.getY()));
+      adjacents.add(new Point(p.getX() + 1, p.getY() - 1));
+      return adjacents;
+   }
 
    public ArrayList<Point> getGasLocs()
    {

@@ -32,6 +32,7 @@ public class InfectedMiner extends Moving {
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> infectedTarget = world.findNearest(getPosition(),
                 MinerFull.class);
+
         if (!infectedTarget.isPresent())
         {
             infectedTarget = world.findNearest(getPosition(), MinerNotFull.class);
@@ -39,12 +40,11 @@ public class InfectedMiner extends Moving {
 
 
         if (!infectedTarget.isPresent() ||
-                !moveTo(world, infectedTarget.get(), scheduler) ||
-                !eatMiner(world, infectedTarget.get(), scheduler)){
-            scheduler.scheduleEvent(this,
-                    createActivityAction(world, imageStore),
-                    getActionPeriod());
-        }
+                !moveTo(world, infectedTarget.get(), scheduler)){}
+        scheduler.scheduleEvent(this,
+                createActivityAction(world, imageStore),
+                getActionPeriod());
+
         // System.out.println("MinerNF: " + getPosition());
         //System.out.println("MinerInf" + getPosition());
     }

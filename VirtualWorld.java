@@ -5,7 +5,7 @@ import processing.core.*;
 import java.util.*;
 
 public final class VirtualWorld
-   extends PApplet
+        extends PApplet
 {
    private static final int TIMER_ACTION_PERIOD = 100;
 
@@ -47,14 +47,19 @@ public final class VirtualWorld
    private static final int FROG_ID = 1;
    private static final int FROG_COL = 2;
    private static final int FROG_ROW = 3;
-   private static final int FROG_ACTION_PERIOD = 5;
+   private static final int FROG_ACTION_PERIOD = 4;
    private static final int FROG_ANIMATION_PERIOD = 6;
    private static double timeScale = 1.0;
+
+   private static final String CONTROLLED_KEY = "controlledMiner";
+
+
 
    private ImageStore imageStore;
    private WorldModel world;
    private WorldView view;
    private EventScheduler scheduler;
+   private ControlledMiner mainChar;
 
    private long next_time;
 
@@ -95,17 +100,23 @@ public final class VirtualWorld
    public void setup()
    {
       this.imageStore = new ImageStore(
-         createImageColored(TILE_WIDTH, TILE_HEIGHT, DEFAULT_IMAGE_COLOR));
+              createImageColored(TILE_WIDTH, TILE_HEIGHT, DEFAULT_IMAGE_COLOR));
       this.world = new WorldModel(WORLD_ROWS, WORLD_COLS,
-         createDefaultBackground(imageStore));
+              createDefaultBackground(imageStore));
       this.view = new WorldView(VIEW_ROWS, VIEW_COLS, this, world,
-         TILE_WIDTH, TILE_HEIGHT);
+              TILE_WIDTH, TILE_HEIGHT);
       this.scheduler = new EventScheduler(timeScale);
+
+      mainChar = ControlledMiner.createControlledMiner(CONTROLLED_KEY, new Point(1, 1),
+              imageStore.getImageList(CONTROLLED_KEY));
+      world.addEntity(mainChar);
 
       loadImages(IMAGE_LIST_FILE_NAME, imageStore, this);
       loadWorld(world, LOAD_FILE_NAME, imageStore);
 
       scheduleActions(world, scheduler, imageStore);
+
+
 
       next_time = System.currentTimeMillis() + TIMER_ACTION_PERIOD;
    }
@@ -124,11 +135,11 @@ public final class VirtualWorld
 
    public void keyPressed()
    {
+      System.out.println(keyCode);
       if (key == CODED)
       {
          int dx = 0;
          int dy = 0;
-
          switch (keyCode)
          {
             case UP:
@@ -143,8 +154,25 @@ public final class VirtualWorld
             case RIGHT:
                dx = 1;
                break;
+
          }
          view.shiftView(dx, dy);
+      }
+
+      switch (keyCode) {
+
+         case 65: //A
+            mainChar.moveLeft(world);
+            break;
+         case 83: //S
+            mainChar.moveDown(world);
+            break;
+         case 68: //D
+            mainChar.moveRight(world);
+            break;
+         case 87: //W
+            mainChar.moveUp(world);
+            break;
       }
    }
 
@@ -157,21 +185,23 @@ public final class VirtualWorld
    {
       Point pressed = mouseToPoint(mouseX, mouseY);
       Point newPressed = mouseToPoint(mouseX +4, mouseY +4);
-//      List<Point> allAdjacents = world.allAdjacents(pressed);
-//
-//         Entity[] newGasArray = new Entity[9];
-//         for (int i = 0; i < 9; i++)
-//         {
-//            newGasArray[i] = Gas.createGas(GAS_ID + " " + String.valueOf(i),
-//                   allAdjacents.get(i),
-//                    imageStore.getImageList(GAS_KEY));
-//
-//            world.addEntity(newGasArray[i]);
-//         }
-//
-         PoisonFrog frog = PoisonFrog.createPoisonFrog(FROG_KEY, newPressed,
-                 imageStore.getImageList(FROG_KEY),FROG_ACTION_PERIOD, FROG_ANIMATION_PERIOD);
-                  world.addEntity(frog);
+      List<Point> allAdjacents = world.allAdjacents(pressed);
+
+      Entity[] newGasArray = new Entity[9];
+      for (int i = 0; i < 9; i++)
+      {
+         newGasArray[i] = Gas.createGas(GAS_ID + " " + String.valueOf(i),
+                 allAdjacents.get(i),
+                 imageStore.getImageList(GAS_KEY));
+
+         world.addEntity(newGasArray[i]);
+      }
+      PoisonFrog frog = PoisonFrog.createPoisonFrog(FROG_KEY, newPressed,
+              imageStore.getImageList(FROG_KEY),FROG_ACTION_PERIOD, FROG_ANIMATION_PERIOD);
+      world.addEntity(frog);
+      frog.scheduleActions(scheduler, world, imageStore);
+
+
    }
 
    private static PImage createImageColored(int width, int height, int color)
@@ -193,7 +223,7 @@ public final class VirtualWorld
    }
 
    private static void loadImages(String filename, ImageStore imageStore,
-      PApplet screen)
+                                  PApplet screen)
    {
       try
       {
@@ -226,9 +256,9 @@ public final class VirtualWorld
       for (Entity entity : world.getEntities())
       {
          if (entity instanceof Actor)
-      {
-         ((Actor)entity).scheduleActions(scheduler, world, imageStore);
-      }
+         {
+            ((Actor)entity).scheduleActions(scheduler, world, imageStore);
+         }
 
       }
    }
