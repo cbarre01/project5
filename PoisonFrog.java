@@ -16,6 +16,11 @@ public class PoisonFrog extends Moving{
     private static final int GAS_ID = 1;
     private static final String GAS_KEY = "gas";
 
+    private static final String POWER_ID_PREFIX = "ore -- ";
+    private static final int POWER_CORRUPT_MIN = 20000;
+    private static final int POWER_CORRUPT_MAX = 30000;
+    private static final String POWER_KEY = "power";
+
 
 
     public PoisonFrog(String id, Point position,
@@ -115,10 +120,8 @@ public class PoisonFrog extends Moving{
     }
     public boolean eatMover(WorldModel world, Entity target, EventScheduler scheduler, ImageStore imageStore)
     {
-        System.out.println("entering eatMover");
         if (adjacent(getPosition(), target.getPosition()))
         {
-            System.out.println("frogger found them");
             List<Point> allAdjacents = world.allAdjacents(getPosition());
 //            List<Point> newAdjecents = new ArrayList<>();
 //            for (int i = 0; i < 4; i++)
@@ -129,14 +132,19 @@ public class PoisonFrog extends Moving{
 //            Collections.shuffle(allAdjacents);
             world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
-            for (int i = 0; i < 9; i++)
+            Point powerUpSpawn = allAdjacents.get(1);
+            Entity powerUp = createPowerUp(powerUpSpawn,  imageStore.getImageList(POWER_KEY));
+            world.addEntity(powerUp);
+            for (int i = 2; i < 9; i++)
             {
-                System.out.println("eating em");
                 world.addEntity(Gas.createGas(GAS_ID + " " + String.valueOf(i),
                         allAdjacents.get(i),
                         imageStore.getImageList(GAS_KEY)));
+
             }
-            System.out.println("waht");
+
+
+
 
             return true;
         }
@@ -147,6 +155,10 @@ public class PoisonFrog extends Moving{
                                          List<PImage> images, int actionPeriod, int animationPeriod)
     {
         return  new PoisonFrog(id, position, images, actionPeriod, animationPeriod);
+    }
+    public static PowerUp createPowerUp(Point position, List<PImage> images)
+    {
+        return  new PowerUp(position, images);
     }
 
 }
