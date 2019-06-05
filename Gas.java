@@ -18,8 +18,7 @@ public class Gas extends Entity {
     public static Gas createGas(String id, Point position,
                                           List<PImage> images)
     {
-        return new Gas(id, position, images
-        );
+        return new Gas(id, position, images);
     }
 
 

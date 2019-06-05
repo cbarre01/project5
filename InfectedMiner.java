@@ -41,9 +41,9 @@ public class InfectedMiner extends Moving {
 
         if (!infectedTarget.isPresent() ||
                 !moveTo(world, infectedTarget.get(), scheduler)){}
-            scheduler.scheduleEvent(this,
-                    createActivityAction(world, imageStore),
-                    getActionPeriod());
+        scheduler.scheduleEvent(this,
+                createActivityAction(world, imageStore),
+                getActionPeriod());
 
         // System.out.println("MinerNF: " + getPosition());
         //System.out.println("MinerInf" + getPosition());
