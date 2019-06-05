@@ -5,7 +5,7 @@ import processing.core.*;
 import java.util.*;
 
 public final class VirtualWorld
-   extends PApplet
+        extends PApplet
 {
    private static final int TIMER_ACTION_PERIOD = 100;
 
@@ -100,19 +100,21 @@ public final class VirtualWorld
    public void setup()
    {
       this.imageStore = new ImageStore(
-         createImageColored(TILE_WIDTH, TILE_HEIGHT, DEFAULT_IMAGE_COLOR));
+              createImageColored(TILE_WIDTH, TILE_HEIGHT, DEFAULT_IMAGE_COLOR));
       this.world = new WorldModel(WORLD_ROWS, WORLD_COLS,
-         createDefaultBackground(imageStore));
+              createDefaultBackground(imageStore));
       this.view = new WorldView(VIEW_ROWS, VIEW_COLS, this, world,
-         TILE_WIDTH, TILE_HEIGHT);
+              TILE_WIDTH, TILE_HEIGHT);
       this.scheduler = new EventScheduler(timeScale);
 
-      mainChar = ControlledMiner.createControlledMiner(CONTROLLED_KEY, new Point(1, 1),
-           imageStore.getImageList(CONTROLLED_KEY));
-      world.addEntity(mainChar);
+      System.out.println(imageStore.getImageList(CONTROLLED_KEY));
 
       loadImages(IMAGE_LIST_FILE_NAME, imageStore, this);
+      mainChar = ControlledMiner.createControlledMiner(CONTROLLED_KEY, new Point(1, 1),
+              imageStore.getImageList(CONTROLLED_KEY));
+      world.addEntity(mainChar);
       loadWorld(world, LOAD_FILE_NAME, imageStore);
+
 
       scheduleActions(world, scheduler, imageStore);
 
@@ -129,13 +131,18 @@ public final class VirtualWorld
          this.scheduler.updateOnTime(time);
          next_time = time + TIMER_ACTION_PERIOD;
       }
-
+      if (mainChar.getHp() < 1)
+      {
+         world.removeEntity(mainChar);
+         System.out.println("Game over! score: " + mainChar.getScore());
+         System.exit(0);
+      }
       view.drawViewport();
    }
 
    public void keyPressed()
    {
-      System.out.println(keyCode);
+      //System.out.println(keyCode);
       if (key == CODED)
       {
          int dx = 0;
@@ -161,18 +168,18 @@ public final class VirtualWorld
 
       switch (keyCode) {
 
-      case 65: //A
-         mainChar.moveLeft(world);
-         break;
-      case 83: //S
-         mainChar.moveDown(world);
-         break;
-      case 68: //D
-         mainChar.moveRight(world);
-         break;
-      case 87: //W
-         mainChar.moveUp(world);
-         break;
+         case 65: //A
+            mainChar.moveMC(world, new Point(-1, 0));
+            break;
+         case 83: //S
+            mainChar.moveMC(world, new Point(0, 1));
+            break;
+         case 68: //D
+            mainChar.moveMC(world, new Point(1, 0));
+            break;
+         case 87: //W
+            mainChar.moveMC(world, new Point(0, -1));
+            break;
       }
    }
 
@@ -187,16 +194,19 @@ public final class VirtualWorld
       Point newPressed = mouseToPoint(mouseX +4, mouseY +4);
       List<Point> allAdjacents = world.allAdjacents(pressed);
 
-         Entity[] newGasArray = new Entity[9];
-         for (int i = 0; i < 9; i++)
-         {
-            newGasArray[i] = Gas.createGas(GAS_ID + " " + String.valueOf(i),
-                   allAdjacents.get(i),
-                    imageStore.getImageList(GAS_KEY));
+      Entity[] newGasArray = new Entity[9];
+      for (int i = 0; i < 9; i++)
+      {
+         newGasArray[i] = Gas.createGas(GAS_ID + " " + String.valueOf(i),
+                 allAdjacents.get(i),
+                 imageStore.getImageList(GAS_KEY));
 
-            world.addEntity(newGasArray[i]);
-         }
-
+         world.addEntity(newGasArray[i]);
+      }
+      PoisonFrog frog = PoisonFrog.createPoisonFrog(FROG_KEY, newPressed,
+              imageStore.getImageList(FROG_KEY),FROG_ACTION_PERIOD, FROG_ANIMATION_PERIOD);
+      world.addEntity(frog);
+      frog.scheduleActions(scheduler, world, imageStore);
 
 
    }
@@ -220,7 +230,7 @@ public final class VirtualWorld
    }
 
    private static void loadImages(String filename, ImageStore imageStore,
-      PApplet screen)
+                                  PApplet screen)
    {
       try
       {
@@ -253,9 +263,9 @@ public final class VirtualWorld
       for (Entity entity : world.getEntities())
       {
          if (entity instanceof Actor)
-      {
-         ((Actor)entity).scheduleActions(scheduler, world, imageStore);
-      }
+         {
+            ((Actor)entity).scheduleActions(scheduler, world, imageStore);
+         }
 
       }
    }

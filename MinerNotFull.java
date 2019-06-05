@@ -2,7 +2,6 @@ import processing.core.PImage;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public class MinerNotFull extends Moving {
@@ -31,7 +30,7 @@ public class MinerNotFull extends Moving {
 
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> notFullTarget = world.findNearest(getPosition(),
-                Ore.class);
+                Coin.class);
         if (!notFullTarget.isPresent() ||
                 !moveTo(world, notFullTarget.get(), scheduler) ||
                 !transformNotFull(world, scheduler, imageStore) ||
@@ -40,7 +39,6 @@ public class MinerNotFull extends Moving {
                     createActivityAction(world, imageStore),
                     getActionPeriod());
         }
-        //System.out.println("MinerNF: " + getPosition());
     }
 
 
@@ -99,22 +97,18 @@ public class MinerNotFull extends Moving {
             world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
 
-            //System.out.println(getPosition());
             world.addEntity(miner);
             miner.scheduleActions(scheduler, world, imageStore);
-            //System.out.println("Transforming " + this.getClass());
             return true;
 
 
 
         }
-        System.out.println("Calling transform from MinerNotFull, result: false");
         return false;
     }
 
     public Point nextPosition(WorldModel world,
                               Point destPos) {
-        //System.out.println("enter nextPos, position: " + getPosition() + ",dest: " + destPos);
 
         Predicate<Point> canPassThrough = new Predicate<Point>()
         {
@@ -129,21 +123,18 @@ public class MinerNotFull extends Moving {
 
             }
         };
-        //System.out.println("enter pathing");
         List<Point> path = pathing.computePath(getPosition(),
                 destPos,
                 canPassThrough,
                 (p1, p2) -> world.neighbors(p1, p2),
                 PathingStrategy.CARDINAL_NEIGHBORS);
 
-        //System.out.println("path complete");
         Point newPos = getPosition();
 
         if (path.size() > 0)
         {
             newPos = path.get(0);
         }
-        //System.out.println(" Exit Next pos: " + newPos);
         return newPos;
     }
 

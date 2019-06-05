@@ -1,7 +1,6 @@
 import processing.core.PImage;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -14,6 +13,10 @@ public class PoisonFrog extends Moving{
 
     private int resourceLimit;
     private int resourceCount;
+    private static final int GAS_ID = 1;
+    private static final String GAS_KEY = "gas";
+
+
 
     public PoisonFrog(String id, Point position,
                      List<PImage> images,
@@ -25,7 +28,6 @@ public class PoisonFrog extends Moving{
         this.setActionPeriod(actionPeriod);
         this.setAnimationPeriod(animationPeriod);
 
-        System.out.println("New Poison Frog hopping at " + this.getPosition());
 
     }
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
@@ -35,21 +37,24 @@ public class PoisonFrog extends Moving{
 //        {
 //            target = world.findNearest(getPosition(), MinerFull.class);
 //        }
-        System.out.println("executing activity Poison Frog");
-        if (!target.isPresent() ||
-                !moveTo(world, target.get(), scheduler) ||
-                        !eatMover(world, target.get(), scheduler))
+        if (!target.isPresent() || !moveTo(world, target.get(), scheduler))
         {
             scheduler.scheduleEvent(this,
                     createActivityAction(world, imageStore),
                     getActionPeriod());
         }
+        if(target.isPresent())
+        {
+            eatMover(world, target.get(), scheduler, imageStore);
+        }
+
+
+
     }
 
 
     public boolean moveTo(WorldModel world,
                           Entity target, EventScheduler scheduler) {
-        System.out.println("Move To Poison Frog");
 
         Point newPos = target.getPosition();
         if (adjacent(getPosition(), target.getPosition())) {
@@ -77,8 +82,6 @@ public class PoisonFrog extends Moving{
 
     public Point nextPosition(WorldModel world,
                               Point destPos) {
-        //System.out.println("enter nextPos, position: " + getPosition() + ",dest: " + destPos);
-        System.out.println("next position  Poison Frog");
 
         Predicate<Point> canPassThrough = new Predicate<Point>()
         {
@@ -110,12 +113,30 @@ public class PoisonFrog extends Moving{
         //System.out.println(" Exit Next pos: " + newPos);
         return newPos;
     }
-    public boolean eatMover(WorldModel world, Entity target, EventScheduler scheduler)
+    public boolean eatMover(WorldModel world, Entity target, EventScheduler scheduler, ImageStore imageStore)
     {
+        System.out.println("entering eatMover");
         if (adjacent(getPosition(), target.getPosition()))
         {
+            System.out.println("frogger found them");
+            List<Point> allAdjacents = world.allAdjacents(getPosition());
+//            List<Point> newAdjecents = new ArrayList<>();
+//            for (int i = 0; i < 4; i++)
+//            {
+//                Collections.shuffle(allAdjacents);
+//                newAdjecents.add(allAdjacents.get(0));
+//            }
+//            Collections.shuffle(allAdjacents);
             world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
+            for (int i = 0; i < 9; i++)
+            {
+                System.out.println("eating em");
+                world.addEntity(Gas.createGas(GAS_ID + " " + String.valueOf(i),
+                        allAdjacents.get(i),
+                        imageStore.getImageList(GAS_KEY)));
+            }
+            System.out.println("waht");
 
             return true;
         }

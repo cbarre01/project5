@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 import java.util.*;
 
-public class Vein extends Actor
+public class  Vein extends Actor
 
 {
     private static final String ORE_ID_PREFIX = "ore -- ";
@@ -39,15 +39,15 @@ public class Vein extends Actor
                 getActionPeriod());
     }
 
-    public static Ore createOre(String id, Point position, int actionPeriod,
-                                   List<PImage> images)
+    public static Coin createOre(String id, Point position, int actionPeriod,
+                                 List<PImage> images)
     {
-        return new Ore(id, position, images,
+        return new Coin(id, position, images,
                 actionPeriod);
     }
 
     public static Vein createVein(String id, Point position, int actionPeriod,
-                                    List<PImage> images)
+                                  List<PImage> images)
     {
         return new Vein(id, position, images,
                 actionPeriod);

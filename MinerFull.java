@@ -41,7 +41,6 @@ public class MinerFull extends Moving {
                         createActivityAction(world, imageStore),
                         this.getActionPeriod());
             }
-            //System.out.println("MinerF: " + getPosition());
         }
     }
 

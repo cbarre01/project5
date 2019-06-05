@@ -2,7 +2,6 @@ import processing.core.PImage;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public class InfectedMiner extends Moving {
@@ -41,9 +40,9 @@ public class InfectedMiner extends Moving {
 
         if (!infectedTarget.isPresent() ||
                 !moveTo(world, infectedTarget.get(), scheduler)){}
-            scheduler.scheduleEvent(this,
-                    createActivityAction(world, imageStore),
-                    getActionPeriod());
+        scheduler.scheduleEvent(this,
+                createActivityAction(world, imageStore),
+                getActionPeriod());
 
         // System.out.println("MinerNF: " + getPosition());
         //System.out.println("MinerInf" + getPosition());

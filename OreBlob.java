@@ -1,7 +1,6 @@
 import processing.core.PImage;
 
 import java.util.*;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public class OreBlob extends Moving {
@@ -26,7 +25,7 @@ public class OreBlob extends Moving {
 
 
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-        Optional<Entity> blobTarget = world.findNearest(getPosition(), Vein.class);
+        Optional<Entity> blobTarget = world.findNearest(getPosition(), ControlledMiner.class);
         long nextPeriod = getActionPeriod();
 
         if (blobTarget.isPresent()) {
@@ -39,6 +38,7 @@ public class OreBlob extends Moving {
                 world.addEntity(quake);
                 nextPeriod += getActionPeriod();
                 quake.scheduleActions(scheduler, world, imageStore);
+                ((ControlledMiner) blobTarget.get()).reduceHp();
             }
         }
 
@@ -76,7 +76,7 @@ public class OreBlob extends Moving {
             public boolean test(Point p)
             {
                 Optional<Entity> occupant = world.getOccupant(p);
-                if (occupant.isPresent() && !(occupant.get() instanceof Ore))
+                if (occupant.isPresent() && !(occupant.get() instanceof Coin))
                 {
                     return false;
                 }
