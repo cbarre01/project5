@@ -27,6 +27,7 @@ quake images/quake5.bmp 255 255 255 0
 quake images/quake6.bmp 255 255 255 0
 rocks images/rock.bmp
 vein images/vein.bmp
+controlledMiner images/wyvern1.bmp 252 252 252 0
 infectedMiner images/minerInfected1.bmp 252 252 252 0
 infectedMiner images/minerInfected2.bmp 252 252 252 0
 infectedMiner images/minerInfected3.bmp 252 252 252 0

@@ -26,11 +26,6 @@ public class ControlledMiner extends Entity {
     public boolean moveMC(WorldModel world, Point translate)
     {
         System.out.println("Score: " + score + ", HP: " + hp);
-        if (hp < 1)
-        {
-            world.removeEntity(this);
-            System.out.println("Game over! score: " + score);
-        }
         Point curPos = getPosition();
         Point newPos = new Point(curPos.getX() + translate.getX(), curPos.getY() + translate.getY());
         if (world.isOccupied(newPos))
@@ -69,6 +64,8 @@ public class ControlledMiner extends Entity {
     {
         return hp;
     }
+
+    public int getScore(){ return score;}
 
 }
 

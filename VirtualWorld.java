@@ -107,12 +107,14 @@ public final class VirtualWorld
               TILE_WIDTH, TILE_HEIGHT);
       this.scheduler = new EventScheduler(timeScale);
 
+      System.out.println(imageStore.getImageList(CONTROLLED_KEY));
+
+      loadImages(IMAGE_LIST_FILE_NAME, imageStore, this);
       mainChar = ControlledMiner.createControlledMiner(CONTROLLED_KEY, new Point(1, 1),
               imageStore.getImageList(CONTROLLED_KEY));
       world.addEntity(mainChar);
-
-      loadImages(IMAGE_LIST_FILE_NAME, imageStore, this);
       loadWorld(world, LOAD_FILE_NAME, imageStore);
+
 
       scheduleActions(world, scheduler, imageStore);
 
@@ -129,7 +131,12 @@ public final class VirtualWorld
          this.scheduler.updateOnTime(time);
          next_time = time + TIMER_ACTION_PERIOD;
       }
-
+      if (mainChar.getHp() < 1)
+      {
+         world.removeEntity(mainChar);
+         System.out.println("Game over! score: " + mainChar.getScore());
+         System.exit(0);
+      }
       view.drawViewport();
    }
 
