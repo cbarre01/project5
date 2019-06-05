@@ -137,6 +137,10 @@ public final class VirtualWorld
          System.out.println("Game over! score: " + mainChar.getScore());
          System.exit(0);
       }
+      if (mainChar.getPowerUpRemaining() < 1)
+      {
+         world.setPowerState(0);
+      }
       view.drawViewport();
    }
 

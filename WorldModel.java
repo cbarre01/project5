@@ -71,13 +71,14 @@ final class WorldModel
    private static final int CONTROLLED_ROW = 3;
    private static final int CONTROLLED_ACTION_PERIOD = 4;
 
-
+   private int powerState = 0;
 
    private int numRows;
    private int numCols;
    private Set<Entity> entities;
    private Background background[][];
    private Entity occupancy[][];
+
 
 
    public WorldModel(int numRows, int numCols, Background defaultBackground)
@@ -574,5 +575,15 @@ final class WorldModel
       return gasLocs;
 
    }
+
+
+   public int getPowerState() {
+      return powerState;
+   }
+
+   public void setPowerState(int powerState) {
+      this.powerState = powerState;
+   }
+
 
 }

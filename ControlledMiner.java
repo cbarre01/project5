@@ -13,6 +13,7 @@ public class ControlledMiner extends Entity {
     private PathingStrategy pathing = new AStarPathingStrategy();
     private int score = 0;
     private int hp = 5;
+    private int powerUpRemaining = 2;
 
     public ControlledMiner(String id, Point position,
                            List<PImage> images) {
@@ -36,9 +37,22 @@ public class ControlledMiner extends Entity {
                 setPosition(newPos);
                 world.moveEntity(this, newPos);
                 world.removeEntity(world.getOccupant(newPos).get());
+                if (powerUpRemaining > 0)
+                {
+                    powerUpRemaining --;
+                }
                 return true;
             }
             return false;
+            if (world.getOccupant(newPos).get() instanceof Powerup)
+            {
+                setPosition(newPos);
+                world.moveEntity(this, newPos);
+                world.removeEntity(world.getOccupant(newPos).get());
+                world.setPowerState(1);
+                powerUpRemaining = 2;
+                return true;
+            }
         }
         setPosition(newPos);
         return true;
@@ -66,6 +80,11 @@ public class ControlledMiner extends Entity {
     }
 
     public int getScore(){ return score;}
+
+    public int getPowerUpRemaining() {
+        return powerUpRemaining;
+    }
+
 
 }
 

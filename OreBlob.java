@@ -73,6 +73,15 @@ public class OreBlob extends Moving {
 
     public Point nextPosition(WorldModel world,
                               Point destPos) {
+        if (world.getPowerState() == 0)
+        {
+            pathing = new AStarPathingStrategy();
+        }
+        if (world.getPowerState() == 1)
+        {
+            pathing = new runAwayStrategy();
+        }
+
         Predicate<Point> canPassThrough = new Predicate<Point>()
         {
             public boolean test(Point p)
@@ -108,6 +117,8 @@ public class OreBlob extends Moving {
         return new Quake(position, images,
                 QUAKE_ACTION_PERIOD, QUAKE_ANIMATION_PERIOD);
     }
+
+
 
 
 
