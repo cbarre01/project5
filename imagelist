@@ -25,6 +25,13 @@ quake images/quake3.bmp 255 255 255 0
 quake images/quake4.bmp 255 255 255 0
 quake images/quake5.bmp 255 255 255 0
 quake images/quake6.bmp 255 255 255 0
+frog images/frog1.bmp 255 255 255 0
+frog images/frog2.bmp 255 255 255 0
+frog images/frog3.bmp 255 255 255 0
+frog images/frog4.bmp 255 255 255 0
+frog images/frog5.bmp 255 255 255 0
+frog images/frog6.bmp 255 255 255 0
+frog images/frog7.bmp 255 255 255 0
 rocks images/rock.bmp
 vein images/vein.bmp
 infectedMiner images/minerInfected1.bmp 252 252 252 0
@@ -32,5 +39,6 @@ infectedMiner images/minerInfected2.bmp 252 252 252 0
 infectedMiner images/minerInfected3.bmp 252 252 252 0
 infectedMiner images/minerInfected4.bmp 252 252 252 0
 infectedMiner images/minerInfected5.bmp 252 252 252 0
+controlledMiner images/wyvern1.bmp 252 252 252 0
 gas images/gas.bmp 252 252 252 0
 background_default images/none.bmp

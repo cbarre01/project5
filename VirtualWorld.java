@@ -107,9 +107,9 @@ public final class VirtualWorld
               TILE_WIDTH, TILE_HEIGHT);
       this.scheduler = new EventScheduler(timeScale);
 
-      mainChar = ControlledMiner.createControlledMiner(CONTROLLED_KEY, new Point(1, 1),
-              imageStore.getImageList(CONTROLLED_KEY));
-      world.addEntity(mainChar);
+      //mainChar = ControlledMiner.createControlledMiner(CONTROLLED_KEY, new Point(1, 1),
+              //imageStore.getImageList(CONTROLLED_KEY));
+      //world.addEntity(mainChar);
 
       loadImages(IMAGE_LIST_FILE_NAME, imageStore, this);
       loadWorld(world, LOAD_FILE_NAME, imageStore);
@@ -158,7 +158,7 @@ public final class VirtualWorld
          }
          view.shiftView(dx, dy);
       }
-
+/*
       switch (keyCode) {
 
          case 65: //A
@@ -174,6 +174,8 @@ public final class VirtualWorld
             mainChar.moveUp(world);
             break;
       }
+      */
+
    }
 
    private Point mouseToPoint(int x, int y)
@@ -188,7 +190,7 @@ public final class VirtualWorld
       List<Point> allAdjacents = world.allAdjacents(pressed);
 
       Entity[] newGasArray = new Entity[9];
-      for (int i = 0; i < 9; i++)
+      for (int i = 1; i < 9; i++)
       {
          newGasArray[i] = Gas.createGas(GAS_ID + " " + String.valueOf(i),
                  allAdjacents.get(i),
