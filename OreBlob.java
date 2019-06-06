@@ -77,12 +77,11 @@ public class OreBlob extends Moving {
         {
             pathing = new AStarPathingStrategy();
         }
-        /*
         if (world.getPowerState() == 1)
         {
-            pathing = new runAwayStrategy();
+            pathing = new StopStrategy();
         }
-*/
+
         Predicate<Point> canPassThrough = new Predicate<Point>()
         {
             public boolean test(Point p)

@@ -50,10 +50,10 @@ public class ControlledMiner extends Entity {
                 world.removeEntity(world.getOccupant(newPos).get());
                 world.setPowerState(1);
                 powerUpRemaining = 2;
-                System.out.println("poweredUP!");
                 return true;
             }
             return false;
+
         }
         setPosition(newPos);
         return true;

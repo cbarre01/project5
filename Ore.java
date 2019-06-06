@@ -23,7 +23,8 @@ public class Ore extends Actor {
     }
 
 
-    public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
+    public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler)
+    {
         Point pos = getPosition();  // store current position before removing
 
         world.removeEntity(this);
@@ -40,12 +41,10 @@ public class Ore extends Actor {
     }
 
     private OreBlob createOreBlob(String id, Point position,
-                                 int actionPeriod, int animationPeriod, List<PImage> images) {
+                                  int actionPeriod, int animationPeriod, List<PImage> images)
+    {
         return new OreBlob(id, position, images,
                 actionPeriod, animationPeriod);
     }
-
-
-
 
 }

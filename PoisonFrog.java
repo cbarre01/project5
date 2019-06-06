@@ -24,8 +24,8 @@ public class PoisonFrog extends Moving{
 
 
     public PoisonFrog(String id, Point position,
-                      List<PImage> images,
-                      int actionPeriod, int animationPeriod) {
+                     List<PImage> images,
+                     int actionPeriod, int animationPeriod) {
         this.setId(id);
         this.setPosition(position);
         this.setImages(images);
@@ -63,9 +63,9 @@ public class PoisonFrog extends Moving{
 
         Point newPos = target.getPosition();
         if (adjacent(getPosition(), target.getPosition())) {
+            world.removeEntity(target);
             scheduler.unscheduleAllEvents(target);
-            world.removeEntity(this);
-            //world.moveEntity(this, newPos);
+            world.moveEntity(this, newPos);
             return true;
         } else {
 
@@ -75,7 +75,6 @@ public class PoisonFrog extends Moving{
                 Optional<Entity> occupant = world.getOccupant(nextPos);
                 if (occupant.isPresent()) {
                     scheduler.unscheduleAllEvents(occupant.get());
-                    world.removeEntity((occupant.get()));
                 }
 
                 world.moveEntity(this, nextPos);
@@ -124,13 +123,6 @@ public class PoisonFrog extends Moving{
         if (adjacent(getPosition(), target.getPosition()))
         {
             List<Point> allAdjacents = world.allAdjacents(getPosition());
-//            List<Point> newAdjecents = new ArrayList<>();
-//            for (int i = 0; i < 4; i++)
-//            {
-//                Collections.shuffle(allAdjacents);
-//                newAdjecents.add(allAdjacents.get(0));
-//            }
-//            Collections.shuffle(allAdjacents);
             world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
             Point powerUpSpawn = allAdjacents.get(1);
@@ -144,16 +136,13 @@ public class PoisonFrog extends Moving{
 
             }
 
-
-
-
             return true;
         }
         return false;
     }
 
     public static PoisonFrog createPoisonFrog( String id, Point position,
-                                               List<PImage> images, int actionPeriod, int animationPeriod)
+                                         List<PImage> images, int actionPeriod, int animationPeriod)
     {
         return  new PoisonFrog(id, position, images, actionPeriod, animationPeriod);
     }

@@ -25,10 +25,6 @@ public class MinerFull extends Moving {
         this.setAnimationPeriod(animationPeriod);
     }
 
-
-
-
-
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         Optional<Entity> fullTarget = world.findNearest(getPosition(),
                 Blacksmith.class);

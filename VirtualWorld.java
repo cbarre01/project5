@@ -140,7 +140,6 @@ public final class VirtualWorld
       if (mainChar.getPowerUpRemaining() < 1)
       {
          world.setPowerState(0);
-         System.out.println("poweredDown!");
       }
       view.drawViewport();
    }
@@ -200,7 +199,7 @@ public final class VirtualWorld
       List<Point> allAdjacents = world.allAdjacents(pressed);
 
       Entity[] newGasArray = new Entity[9];
-      for (int i = 0; i < 9; i++)
+      for (int i = 1; i < 9; i++)
       {
          newGasArray[i] = Gas.createGas(GAS_ID + " " + String.valueOf(i),
                  allAdjacents.get(i),
@@ -208,7 +207,7 @@ public final class VirtualWorld
 
          world.addEntity(newGasArray[i]);
       }
-      PoisonFrog frog = PoisonFrog.createPoisonFrog(FROG_KEY, newPressed,
+      PoisonFrog frog = PoisonFrog.createPoisonFrog(FROG_KEY, allAdjacents.get(0),
               imageStore.getImageList(FROG_KEY),FROG_ACTION_PERIOD, FROG_ANIMATION_PERIOD);
       world.addEntity(frog);
       frog.scheduleActions(scheduler, world, imageStore);
