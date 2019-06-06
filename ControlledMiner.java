@@ -43,16 +43,17 @@ public class ControlledMiner extends Entity {
                 }
                 return true;
             }
-            return false;
-            if (world.getOccupant(newPos).get() instanceof Powerup)
+            if (world.getOccupant(newPos).get() instanceof PowerUp)
             {
                 setPosition(newPos);
                 world.moveEntity(this, newPos);
                 world.removeEntity(world.getOccupant(newPos).get());
                 world.setPowerState(1);
                 powerUpRemaining = 2;
+                System.out.println("poweredUP!");
                 return true;
             }
+            return false;
         }
         setPosition(newPos);
         return true;

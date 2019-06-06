@@ -140,6 +140,7 @@ public final class VirtualWorld
       if (mainChar.getPowerUpRemaining() < 1)
       {
          world.setPowerState(0);
+         System.out.println("poweredDown!");
       }
       view.drawViewport();
    }
