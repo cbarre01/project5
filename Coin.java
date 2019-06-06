@@ -7,9 +7,9 @@ public class Coin extends Actor {
 
     private static final String ENEMY_KEY = "blob";
     private static final String ENEMY_ID_SUFFIX = " -- blob";
-    private static final int BLOB_PERIOD_SCALE = 4;
-    private static final int BLOB_ANIMATION_MIN = 50;
-    private static final int BLOB_ANIMATION_MAX = 150;
+    private static final int ENEMY_PERIOD_SCALE = 4;
+    private static final int ENEMY_ANIMATION_MIN = 50;
+    private static final int ENEMY_ANIMATION_MAX = 150;
 
 
     public Coin(String id, Point position,
@@ -31,9 +31,9 @@ public class Coin extends Actor {
         scheduler.unscheduleAllEvents(this);
 
         Animated blob = createEnemy(getId() + ENEMY_ID_SUFFIX,
-                pos, getActionPeriod() / BLOB_PERIOD_SCALE,
-                BLOB_ANIMATION_MIN +
-                        rand.nextInt(BLOB_ANIMATION_MAX - BLOB_ANIMATION_MIN),
+                pos, getActionPeriod() / ENEMY_PERIOD_SCALE,
+                ENEMY_ANIMATION_MIN +
+                        rand.nextInt(ENEMY_ANIMATION_MAX - ENEMY_ANIMATION_MIN),
                 imageStore.getImageList(ENEMY_KEY));
 
         world.addEntity(blob);

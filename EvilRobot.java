@@ -106,19 +106,6 @@ public class EvilRobot extends Moving {
         return newPos;
     }
 
-    public boolean eatMiner(WorldModel world, Entity target, EventScheduler scheduler)
-    {
-        if (adjacent(getPosition(), target.getPosition()))
-        {
-            world.removeEntity(this);
-            scheduler.unscheduleAllEvents(this);
-
-            //world.addEntity(miner);
-            //miner.scheduleActions(scheduler, world, imageStore);
-            return true;
-        }
-        return false;
-    }
 
     public static EvilRobot createEvilRobot(String id, int resourceLimit,
                                             Point position, int actionPeriod, int animationPeriod,

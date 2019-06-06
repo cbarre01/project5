@@ -5,10 +5,10 @@ import java.util.*;
 public class TreasureChest extends Actor
 
 {
-    private static final String ORE_ID_PREFIX = "ore -- ";
-    private static final int ORE_CORRUPT_MIN = 20000;
-    private static final int ORE_CORRUPT_MAX = 30000;
-    private static final String ORE_KEY = "ore";
+    private static final String TREASURECHEST_ID_PREFIX = "ore -- ";
+    private static final int TREASURECHEST_CORRUPT_MIN = 20000;
+    private static final int TREASURECHEST_CORRUPT_MAX = 30000;
+    private static final String TREASURECHEST_KEY = "ore";
 
 
     public TreasureChest(String id, Point position,
@@ -26,10 +26,10 @@ public class TreasureChest extends Actor
         Optional<Point> openPt = world.findOpenAround(getPosition());
 
         if (openPt.isPresent()) {
-            Actor coin = createCoin(ORE_ID_PREFIX + getId(),
-                    openPt.get(), ORE_CORRUPT_MIN +
-                            rand.nextInt(ORE_CORRUPT_MAX - ORE_CORRUPT_MIN),
-                    imageStore.getImageList(ORE_KEY));
+            Actor coin = createCoin(TREASURECHEST_ID_PREFIX + getId(),
+                    openPt.get(), TREASURECHEST_CORRUPT_MIN +
+                            rand.nextInt(TREASURECHEST_CORRUPT_MAX - TREASURECHEST_CORRUPT_MIN),
+                    imageStore.getImageList(TREASURECHEST_KEY));
             world.addEntity(coin);
             coin.scheduleActions(scheduler, world, imageStore);
         }

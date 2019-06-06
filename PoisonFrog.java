@@ -10,14 +10,10 @@ public class PoisonFrog extends Moving{
     private PathingStrategy pathing = new SingleStepPathingStrategy();
 
 
-    private int resourceLimit;
-    private int resourceCount;
+
     private static final int GAS_ID = 1;
     private static final String GAS_KEY = "gas";
 
-    private static final String POWER_ID_PREFIX = "ore -- ";
-    private static final int POWER_CORRUPT_MIN = 20000;
-    private static final int POWER_CORRUPT_MAX = 30000;
     private static final String POWER_KEY = "power";
 
 
