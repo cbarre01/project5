@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class AStarPathingStrategy
+class RunAwayPathingStrategy
         implements PathingStrategy
 {
 
@@ -133,7 +133,9 @@ class AStarPathingStrategy
             current = current.getPrior();
             //System.out.println(path);
         }
+            path.add(getOppositeDirection(start, current.getPoint()));
         Collections.reverse(path);
+        //System.out.println("Current: " + startNode.getPoint() + ", Prior:" + current.getPoint());
         return path;
 
     }
@@ -153,5 +155,16 @@ class AStarPathingStrategy
             }
         }
         return false;
+    }
+
+    public Point getOppositeDirection(Point cur, Point prior)
+    {
+        Point translation = new Point(cur.getX() - prior.getX(), cur.getY() - prior.getY());
+        int translateX = translation.getX();
+        int translateY = translation.getY();
+        int prevY = 0-translateY;
+        int prevX = 0-translateX;
+        return new Point(cur.getX() + translateX, cur.getY() + translateY);
+
     }
 }

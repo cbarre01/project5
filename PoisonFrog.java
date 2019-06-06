@@ -1,7 +1,6 @@
 import processing.core.PImage;
 
 import java.util.*;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 
@@ -36,11 +35,11 @@ public class PoisonFrog extends Moving{
 
     }
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-        Optional<Entity> target = world.findNearest(getPosition(), InfectedMiner.class);
+        Optional<Entity> target = world.findNearest(getPosition(), EvilRobot.class);
 
 //        if (!target.isPresent())
 //        {
-//            target = world.findNearest(getPosition(), MinerFull.class);
+//            target = world.findNearest(getPosition(), RobotFull.class);
 //        }
         if (!target.isPresent() || !moveTo(world, target.get(), scheduler))
         {
@@ -123,13 +122,6 @@ public class PoisonFrog extends Moving{
         if (adjacent(getPosition(), target.getPosition()))
         {
             List<Point> allAdjacents = world.allAdjacents(getPosition());
-//            List<Point> newAdjecents = new ArrayList<>();
-//            for (int i = 0; i < 4; i++)
-//            {
-//                Collections.shuffle(allAdjacents);
-//                newAdjecents.add(allAdjacents.get(0));
-//            }
-//            Collections.shuffle(allAdjacents);
             world.removeEntity(this);
             scheduler.unscheduleAllEvents(this);
             Point powerUpSpawn = allAdjacents.get(1);
@@ -142,9 +134,6 @@ public class PoisonFrog extends Moving{
                         imageStore.getImageList(GAS_KEY)));
 
             }
-
-
-
 
             return true;
         }

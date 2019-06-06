@@ -59,7 +59,7 @@ public final class VirtualWorld
    private WorldModel world;
    private WorldView view;
    private EventScheduler scheduler;
-   private ControlledMiner mainChar;
+   private GreenMan mainChar;
 
    private long next_time;
 
@@ -110,7 +110,7 @@ public final class VirtualWorld
       System.out.println(imageStore.getImageList(CONTROLLED_KEY));
 
       loadImages(IMAGE_LIST_FILE_NAME, imageStore, this);
-      mainChar = ControlledMiner.createControlledMiner(CONTROLLED_KEY, new Point(1, 1),
+      mainChar = GreenMan.createGreenMan(CONTROLLED_KEY, new Point(1, 1),
               imageStore.getImageList(CONTROLLED_KEY));
       world.addEntity(mainChar);
       loadWorld(world, LOAD_FILE_NAME, imageStore);
@@ -136,6 +136,10 @@ public final class VirtualWorld
          world.removeEntity(mainChar);
          System.out.println("Game over! score: " + mainChar.getScore());
          System.exit(0);
+      }
+      if (mainChar.getPowerUpRemaining() < 1)
+      {
+         world.setPowerState(0);
       }
       view.drawViewport();
    }
@@ -195,7 +199,7 @@ public final class VirtualWorld
       List<Point> allAdjacents = world.allAdjacents(pressed);
 
       Entity[] newGasArray = new Entity[9];
-      for (int i = 0; i < 9; i++)
+      for (int i = 1; i < 9; i++)
       {
          newGasArray[i] = Gas.createGas(GAS_ID + " " + String.valueOf(i),
                  allAdjacents.get(i),
@@ -203,7 +207,7 @@ public final class VirtualWorld
 
          world.addEntity(newGasArray[i]);
       }
-      PoisonFrog frog = PoisonFrog.createPoisonFrog(FROG_KEY, newPressed,
+      PoisonFrog frog = PoisonFrog.createPoisonFrog(FROG_KEY, allAdjacents.get(0),
               imageStore.getImageList(FROG_KEY),FROG_ACTION_PERIOD, FROG_ANIMATION_PERIOD);
       world.addEntity(frog);
       frog.scheduleActions(scheduler, world, imageStore);

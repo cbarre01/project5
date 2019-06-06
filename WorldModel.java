@@ -71,13 +71,14 @@ final class WorldModel
    private static final int CONTROLLED_ROW = 3;
    private static final int CONTROLLED_ACTION_PERIOD = 4;
 
-
+   private int powerState = 0;
 
    private int numRows;
    private int numCols;
    private Set<Entity> entities;
    private Background background[][];
    private Entity occupancy[][];
+
 
 
    public WorldModel(int numRows, int numCols, Background defaultBackground)
@@ -144,7 +145,7 @@ final class WorldModel
       {
          Point pt = new Point(Integer.parseInt(properties[MINER_COL]),
                  Integer.parseInt(properties[MINER_ROW]));
-         MinerNotFull entity = MinerNotFull.createMinerNotFull(properties[MINER_ID],
+         RobotEmpty entity = RobotEmpty.createRobotEmpty(properties[MINER_ID],
                  Integer.parseInt(properties[MINER_LIMIT]),
                  pt,
                  Integer.parseInt(properties[MINER_ACTION_PERIOD]),
@@ -193,7 +194,7 @@ final class WorldModel
          Point pt = new Point(
                  Integer.parseInt(properties[CONTROLLED_COL]),
                  Integer.parseInt(properties[CONTROLLED_ROW]));
-         ControlledMiner entity = ControlledMiner.createControlledMiner(properties[CONTROLLED_ID],
+         GreenMan entity = GreenMan.createGreenMan(properties[CONTROLLED_ID],
                  pt, imageStore.getImageList(CONTROLLED_KEY));
          tryAddEntity(entity);
       }
@@ -223,7 +224,7 @@ final class WorldModel
       {
          Point pt = new Point(Integer.parseInt(properties[ORE_COL]),
                  Integer.parseInt(properties[ORE_ROW]));
-         Ore entity = Vein.createOre(properties[ORE_ID],
+         Coin entity = TreasureChest.createCoin(properties[ORE_ID],
                  pt, Integer.parseInt(properties[ORE_ACTION_PERIOD]),
                  imageStore.getImageList(ORE_KEY));
          tryAddEntity(entity);
@@ -252,7 +253,7 @@ final class WorldModel
       {
          Point pt = new Point(Integer.parseInt(properties[VEIN_COL]),
                  Integer.parseInt(properties[VEIN_ROW]));
-         Vein entity = Vein.createVein(properties[VEIN_ID],
+         TreasureChest entity = TreasureChest.createChest(properties[VEIN_ID],
                  pt,
                  Integer.parseInt(properties[VEIN_ACTION_PERIOD]),
                  imageStore.getImageList(VEIN_KEY));
@@ -574,5 +575,15 @@ final class WorldModel
       return gasLocs;
 
    }
+
+
+   public int getPowerState() {
+      return powerState;
+   }
+
+   public void setPowerState(int powerState) {
+      this.powerState = powerState;
+   }
+
 
 }

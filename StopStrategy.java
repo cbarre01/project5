@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class AStarPathingStrategy
+class StopStrategy
         implements PathingStrategy
 {
 
@@ -115,7 +115,7 @@ class AStarPathingStrategy
 
             for (Node curOL : openList)
             {
-                if (curOL.getF() < smallestF.getF())
+                if (curOL.getF() > smallestF.getF())
                 {
                     smallestF = curOL;
                 }
